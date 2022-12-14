@@ -24,14 +24,10 @@ export default function HeaderCartButton(props) {
     setBtnIsHighlighted(true);
 
     const timer = setTimeout(() => {
-      console.log("In SetTimeout");
-
       setBtnIsHighlighted(false);
     }, 200);
 
     return () => {
-      console.log("In return function");
-
       clearTimeout(timer);
     };
   }, [items]);

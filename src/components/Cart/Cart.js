@@ -9,6 +9,8 @@ import classes from "./Cart.module.css";
 
 export default function Cart(props) {
   const [isCheckout, setIsCheckout] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
   const cartCtx = useContext(CartContext);
 
   const totalAmount = cartCtx.totalAmount.toFixed(2);
@@ -25,8 +27,10 @@ export default function Cart(props) {
     setIsCheckout(true);
   };
 
-  const submitOrderHandler = (userData) => {
-    fetch(
+  const submitOrderHandler = async (userData) => {
+    setIsSubmitting(true);
+    // no response-check, so we assume the fetch always works without errors.
+    await fetch(
       "https://foodorderapp-5c9f8-default-rtdb.europe-west1.firebasedatabase.app/orders.json",
       {
         method: "POST",
@@ -36,6 +40,10 @@ export default function Cart(props) {
         }),
       }
     );
+    cartCtx.clearCart();
+    setIsSubmitting(false);
+    setDidSubmit(true);
+
   };
 
   const cartItems = (
@@ -53,8 +61,8 @@ export default function Cart(props) {
     </ul>
   );
 
-  return (
-    <Modal onClick={props.onHideCart}>
+  const cartModalContent = (
+    <React.Fragment>
       {cartItems}
       <div className={classes.total}>
         <span>Total Amount</span>
@@ -75,6 +83,17 @@ export default function Cart(props) {
           )}
         </div>
       )}
+    </React.Fragment>
+  );
+
+  const isSubmittingModalContent = <p>Sending order data...</p>;
+  const didSubmitModalContent = <p>Successfully sent the order!</p>;
+
+  return (
+    <Modal onClick={props.onHideCart}>
+      {!isSubmitting && !didSubmit && cartModalContent}
+      {isSubmitting && isSubmittingModalContent}
+      {didSubmit && didSubmitModalContent}
     </Modal>
   );
 }
