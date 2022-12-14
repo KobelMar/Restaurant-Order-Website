@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 
 import useInput from "../../hooks/use-input";
 
@@ -48,10 +48,9 @@ export default function Checkout(props) {
   const confirmHandler = (event) => {
     event.preventDefault();
 
-    console.log(name);
-    console.log(street);
-    console.log(postal);
-    console.log(city);
+    const userData = {name, street, postal, city}
+    props.onSubmit(userData)
+
 
     resetName();
     resetCity();

@@ -23,7 +23,20 @@ export default function Cart(props) {
 
   const orderHandler = () => {
     setIsCheckout(true);
-  }
+  };
+
+  const submitOrderHandler = (userData) => {
+    fetch(
+      "https://foodorderapp-5c9f8-default-rtdb.europe-west1.firebasedatabase.app/orders.json",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          user: userData,
+          orderedItems: cartCtx.items,
+        }),
+      }
+    );
+  };
 
   const cartItems = (
     <ul className={classes["cart-items"]}>
@@ -47,14 +60,21 @@ export default function Cart(props) {
         <span>Total Amount</span>
         <span>{`$ ${totalAmount}`}</span>
       </div>
-      {isCheckout ?< Checkout onCancel={props.onHideCart} />:
-
-      <div className={classes.actions}>
-        <button className={classes["button--alt"]} onClick={props.onHideCart}>
-          Close
-        </button>
-        {cartHasItems && <button className={classes.button} onClick={orderHandler}> Order</button>}
-      </div>}
+      {isCheckout ? (
+        <Checkout onCancel={props.onHideCart} onSubmit={submitOrderHandler} />
+      ) : (
+        <div className={classes.actions}>
+          <button className={classes["button--alt"]} onClick={props.onHideCart}>
+            Close
+          </button>
+          {cartHasItems && (
+            <button className={classes.button} onClick={orderHandler}>
+              {" "}
+              Order
+            </button>
+          )}
+        </div>
+      )}
     </Modal>
   );
 }

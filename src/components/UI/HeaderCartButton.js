@@ -18,7 +18,6 @@ export default function HeaderCartButton(props) {
   let btnClasses = `${classes.button} ${btnIsHighlighted ? classes.bump : ""}`;
 
   useEffect(() => {
-    console.log("In Top UseEffect");
     if (items.length === 0) {
       return;
     }
