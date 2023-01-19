@@ -12,7 +12,9 @@ export default function MealItemForm(props) {
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
+    //with "+" tranforming stringvalue into number.
     const enteredAmount = +amountInputRef.current.value;
+
 
     if (
       amountInputRef.current.value.trim().length === 0 ||
